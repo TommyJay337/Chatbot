@@ -18,18 +18,19 @@ print("The OpenAI client has been successfully initialized.")
 def make_api_call():
     retry_delay = 20  # Initial backoff delay in seconds
     while True:
+        user_input = input("You: ")
         try:
             chat_completion = client.chat.completions.create(
                 model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": "This is a test"}],
+                messages=[{"role": "user", "content": user_input}],
                 temperature=1,
                 max_tokens=256,
                 top_p=1,
                 frequency_penalty=0,
                 presence_penalty=0
             )
-            print("Response:", chat_completion.choices[0].message['content'])
-            break
+            print("ChatBot:", chat_completion.choices[0].message.content)
+            
         except openai.RateLimitError as e:
             print("Rate limit exceeded, retrying in", retry_delay, "seconds...")
             print(e)
@@ -39,18 +40,7 @@ def make_api_call():
             print("An unexpected error occurred:", e)
             break
 
-make_api_call()
-
-
 '''
-def chat_with_gpt(prompt):
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages = [{"role": "system", "content": prompt}]
-    )
-
-    return response.choices[0].message.content.strip()
-
 if __name__ == "__main__":
     while True:
         user_input = input("You: ")
@@ -59,4 +49,3 @@ if __name__ == "__main__":
         response = chat_with_gpt(user_input)
         print("ChatBot:", response)
 '''
-        
